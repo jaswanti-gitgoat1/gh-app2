@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.3.0.RELEASE'
+}
+
+dependencies {
+    // SCA - Gradle/Java packages with known critical/high vulnerabilities
+
+    // Log4Shell (CVE-2021-44228) - CVSS 10.0
+    implementation 'org.apache.logging.log4j:log4j-core:2.12.0'
+
+    // Spring4Shell (CVE-2022-22965) - CVSS 9.8
+    implementation 'org.springframework:spring-webmvc:5.2.0.RELEASE'
+
+    // Apache Shiro auth bypass (CVE-2020-11989) - CVSS 9.8
+    implementation 'org.apache.shiro:shiro-core:1.5.3'
+
+    // Netty HTTP request smuggling (CVE-2021-21295)
+    implementation 'io.netty:netty-codec-http:4.1.59.Final'
+
+    // XStream deserialization RCE (CVE-2021-29505) - CVSS 9.8
+    implementation 'com.thoughtworks.xstream:xstream:1.4.15'
+
+    // JNDI injection via Groovy (CVE-2015-3253)
+    implementation 'org.codehaus.groovy:groovy:2.4.4'
+
+    // Velocity RCE (CVE-2020-13936) - CVSS 9.8
+    implementation 'org.apache.velocity:velocity-engine-core:2.2'
+
+    // Apache CXF SSRF (CVE-2021-22696)
+    implementation 'org.apache.cxf:cxf-core:3.4.2'
+
+    // H2 Console RCE (CVE-2022-23221) - CVSS 9.8
+    implementation 'com.h2database:h2:2.0.204'
+
+    // Quartz scheduler SQLi (CVE-2019-13990) - CVSS 9.8
+    implementation 'org.quartz-scheduler:quartz:2.3.1'
+
+    // Snakeyaml deserialization (CVE-2022-1471) - CVSS 9.8
+    implementation 'org.yaml:snakeyaml:1.30'
+
+    // Kotlin serialization (CVE-2022-24329)
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.0'
+
+    // SpEL injection via Spring Expression (CVE-2022-22950)
+    implementation 'org.springframework:spring-expression:5.2.0.RELEASE'
+
+    // Apache Tomcat deserialization (CVE-2021-25329)
+    implementation 'org.apache.tomcat:tomcat-catalina:9.0.43'
+
+    // Okhttp MITM (CVE-2021-0341)
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+}

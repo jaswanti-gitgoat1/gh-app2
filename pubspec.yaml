@@ -1,0 +1,53 @@
+name: gh_app2
+description: Flutter/Dart app with SCA vulnerabilities for testing
+version: 1.0.0
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+# SCA - Dart/Flutter packages with known vulnerabilities
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # http - CVE-2020-35669 - header injection
+  http: ^0.12.0
+
+  # dio - CVE-2021-31402 - SSRF / open redirect
+  dio: ^3.0.10
+
+  # image - CVE-2021-32714 - DoS via malformed image
+  image: ^3.0.1
+
+  # xml - CVE-2021-32728 - XXE
+  xml: ^4.5.0
+
+  # crypto - weak algorithm usage
+  crypto: ^2.1.5
+
+  # archive - CVE-2021-32715 - path traversal in zip extraction
+  archive: ^3.1.2
+
+  # yaml - CVE-2021-32716 - billion laughs DoS
+  yaml: ^3.1.0
+
+  # pointycastle - weak crypto primitives
+  pointycastle: ^3.1.1
+
+  # flutter_secure_storage - insecure fallback on some platforms
+  flutter_secure_storage: ^4.2.0
+
+  # shared_preferences - stores sensitive data unencrypted
+  shared_preferences: ^2.0.6
+
+  # sqflite - CVE-2021-32717 - SQLi via raw queries
+  sqflite: ^2.0.0+3
+
+  # firebase_auth - CVE-2021-39185 - auth bypass on token validation
+  firebase_auth: ^3.1.0
+
+  # path_provider - path traversal potential
+  path_provider: ^2.0.2
+
+  # webview_flutter - CVE-2022-0264 - JavaScript injection
+  webview_flutter: ^2.0.14
