@@ -1,0 +1,35 @@
+{
+  "name": "gh-app2-license-issues",
+  "version": "1.0.0",
+  "description": "Packages with license violations and reputation issues",
+  "license": "MIT",
+  "dependencies": {
+    "gpl-module": "1.0.0",
+    "node-ipc": "10.1.1",
+    "event-stream": "3.3.6",
+    "flatmap-stream": "0.1.1",
+    "colors": "1.4.44-liberty-2",
+    "ua-parser-js": "0.7.29",
+    "coa": "2.0.3",
+    "rc": "1.2.8",
+    "protestware": "1.0.0",
+    "left-pad": "0.0.3",
+    "is-thirteen": "2.0.0",
+
+    "readline-sync": "1.4.9",
+    "nodemailer": "2.7.0",
+    "electron": "1.0.0",
+    "phantomjs": "2.1.7",
+    "imagemagick": "0.1.3",
+
+    "agpl-licensed-package": "1.0.0",
+    "ffmpeg-static": "2.4.0",
+    "copyleft-lib": "1.0.0"
+  },
+  "licenseOverrides": {
+    "node-ipc@10.1.1": "UNKNOWN",
+    "event-stream@3.3.6": "MALICIOUS",
+    "colors@1.4.44-liberty-2": "UNLICENSED",
+    "flatmap-stream@0.1.1": "MALICIOUS"
+  }
+}

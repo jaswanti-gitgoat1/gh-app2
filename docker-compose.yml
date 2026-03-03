@@ -1,0 +1,66 @@
+version: '3.7'
+
+# IaC - Docker Compose with insecure configurations
+
+services:
+  app:
+    image: python:2.7                        # Deprecated Python 2.7
+    container_name: insecure-app
+    privileged: true                         # Privileged mode
+    network_mode: host                       # Host network
+    pid: host                                # Host PID namespace
+    environment:
+      - DB_PASSWORD=docker_compose_pass      # Plaintext secrets
+      - API_KEY=docker_compose_api_key
+      - SECRET_KEY=docker_compose_secret
+    volumes:
+      - /:/host:rw                           # Mounts host root
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket exposed
+      - /etc/passwd:/etc/passwd:rw           # Host passwd mounted
+    ports:
+      - "0.0.0.0:8080:8080"                 # Bound to all interfaces
+    cap_add:
+      - ALL                                  # All capabilities added
+    security_opt:
+      - no-new-privileges:false
+    restart: always
+
+  db:
+    image: mysql:5.6                         # Old vulnerable MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"            # Hardcoded root password
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"      # Empty password allowed
+    ports:
+      - "0.0.0.0:3306:3306"                 # DB exposed to internet
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+
+  redis:
+    image: redis:3.0                         # Old vulnerable Redis
+    ports:
+      - "0.0.0.0:6379:6379"                 # Redis exposed to internet
+    command: redis-server --requirepass ""   # No password
+
+  mongodb:
+    image: mongo:3.4                         # Old vulnerable MongoDB
+    ports:
+      - "0.0.0.0:27017:27017"               # MongoDB exposed
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin      # Weak password
+
+  nginx:
+    image: nginx:1.14                        # Old vulnerable nginx
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:rw
+
+  elasticsearch:
+    image: elasticsearch:6.8.0              # Old vulnerable ES
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false        # Security disabled
+    ports:
+      - "0.0.0.0:9200:9200"                # ES exposed to internet

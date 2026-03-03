@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template with IaC vulnerabilities for testing
+
+Parameters:
+  DBPassword:
+    Type: String
+    Default: "hardcoded_cf_pass_123"       # Hardcoded default password
+
+Resources:
+  # S3 bucket - public access (CKV_AWS_20)
+  PublicBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: public-data-bucket
+      AccessControl: PublicReadWrite         # Public access
+      VersioningConfiguration:
+        Status: Suspended                    # Versioning off
+      LoggingConfiguration: {}              # No logging
+
+  # EC2 Security Group - open to world (CKV_AWS_25)
+  OpenSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Wide open SG
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0"              # All inbound
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: "0.0.0.0/0"             # SSH from internet
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: "0.0.0.0/0"             # RDP from internet
+
+  # RDS - unencrypted and public (CKV_AWS_17)
+  InsecureDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t2.micro
+      Engine: mysql
+      MasterUsername: admin
+      MasterUserPassword: !Ref DBPassword
+      PubliclyAccessible: true              # Public DB
+      StorageEncrypted: false               # No encryption
+      BackupRetentionPeriod: 0              # No backups
+      DeletionProtection: false
+      EnableCloudwatchLogsExports: []       # No logs
+
+  # IAM Role - wildcard permissions (CKV_AWS_40)
+  OverpermissiveRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AdminRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"                       # Anyone can assume
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: AdminPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "*"                  # All actions
+                Resource: "*"               # All resources
+
+  # Lambda - insecure runtime and secrets in env
+  InsecureLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: insecure-function
+      Runtime: python2.7                    # Deprecated runtime
+      Handler: index.handler
+      Role: !GetAtt OverpermissiveRole.Arn
+      Environment:
+        Variables:
+          DB_PASSWORD: "cf_lambda_secret"   # Secret in plain text
+          API_KEY: "sk-hardcoded-key"
+      Code:
+        ZipFile: |
+          def handler(event, context):
+            return "hello"
+
+  # ElasticSearch - no encryption, public (CKV_AWS_84)
+  InsecureElasticsearch:
+    Type: AWS::Elasticsearch::Domain
+    Properties:
+      DomainName: insecure-es
+      ElasticsearchVersion: "6.0"
+      EncryptionAtRestOptions:
+        Enabled: false                       # No encryption at rest
+      NodeToNodeEncryptionOptions:
+        Enabled: false                       # No node encryption
+      AccessPolicies:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"                       # Open to everyone
+            Action: "es:*"
+
+  # CloudTrail - not encrypted, no validation (CKV_AWS_67)
+  InsecureTrail:
+    Type: AWS::CloudTrail::Trail
+    Properties:
+      TrailName: insecure-trail
+      S3BucketName: !Ref PublicBucket
+      IsLogging: false                      # Logging off
+      EnableLogFileValidation: false        # No validation
+      IncludeGlobalServiceEvents: false
+
+  # SQS - no encryption (CKV_AWS_27)
+  InsecureQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: insecure-queue
+      # No KmsMasterKeyId = unencrypted
+
+  # SNS - no encryption (CKV_AWS_26)
+  InsecureTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: insecure-topic
+      # No KmsMasterKeyId = unencrypted

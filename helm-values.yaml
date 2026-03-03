@@ -1,0 +1,95 @@
+# IaC - Helm chart values with insecure configurations
+
+replicaCount: 1
+
+image:
+  repository: python
+  tag: "2.7"                               # Deprecated Python 2.7 image
+  pullPolicy: Never
+
+# Hardcoded secrets in values (CKV_K8S_35)
+secrets:
+  dbPassword: "helm_hardcoded_pass_123"
+  apiKey: "helm_hardcoded_api_key"
+  jwtSecret: "helm_jwt_secret_never_rotate"
+  awsKey: "AKIAIOSFODNN7HMEXAMPLE"
+
+# Security context - insecure (CKV_K8S_30)
+securityContext:
+  privileged: true
+  runAsRoot: true
+  runAsUser: 0
+  allowPrivilegeEscalation: true
+  readOnlyRootFilesystem: false
+  capabilities:
+    add:
+      - ALL
+
+# Host access (CKV_K8S_18)
+hostNetwork: true
+hostPID: true
+hostIPC: true
+
+# No resource limits (CKV_K8S_11)
+resources: {}
+
+# Service - LoadBalancer exposes everything
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
+
+# Ingress - no TLS
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []                                  # No TLS configured
+
+# RBAC - overly permissive
+rbac:
+  create: true
+  rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["*"]                         # Full cluster access
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true       # Auto-mount SA token
+
+# Volume mounts - host filesystem (CKV_K8S_28)
+volumes:
+  - name: host-root
+    hostPath:
+      path: /                              # Mount host root
+  - name: docker-sock
+    hostPath:
+      path: /var/run/docker.sock           # Docker socket
+
+# Environment variables with secrets
+env:
+  - name: DB_PASSWORD
+    value: "helm_env_pass_plaintext"
+  - name: SECRET_KEY
+    value: "helm_env_secret_plaintext"
+
+# NetworkPolicy - disabled (allows all traffic)
+networkPolicy:
+  enabled: false
+
+# PodDisruptionBudget - none configured
+podDisruptionBudget:
+  enabled: false
+
+# Persistence with no encryption
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteMany
+  size: 10Gi
+  encrypted: false

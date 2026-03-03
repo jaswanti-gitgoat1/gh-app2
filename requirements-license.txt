@@ -1,0 +1,29 @@
+# Python packages with license issues (GPL, AGPL, unknown, commercial)
+
+# AGPL-3.0 licensed (copyleft - requires open sourcing derivative works)
+PyOpenGL==3.1.5            # LGPL
+Ghostscript==0.7            # GPL-3.0
+mysql-connector-python==8.0.26  # GPL-2.0
+sip==4.19.25               # GPL-2.0 / GPL-3.0
+
+# GPL-2.0 / GPL-3.0 (strong copyleft)
+pyGPG==0.2                 # GPL-3.0
+gdb==12.1                  # GPL-3.0
+groff==1.22.4               # GPL-3.0
+readline==6.2.4.1           # GPL-3.0
+
+# Unknown / unlicensed
+ctx==0.1.2                  # Malicious - no license
+pymafka==0.2                # Unknown license - typosquatting
+discordcmd==1.0             # Malicious reputation
+easyinstall==0.0.1          # Unknown - possible typosquat
+pwd==1                      # Malicious - steals credentials
+setup-tools==40.8.0         # Typosquat of setuptools
+python3-dateutil==2.8.1     # Unknown license variant
+loguru-security==0.0.1      # Unverified - suspicious
+
+# Commercial / restrictive licenses
+kiwisolver==1.3.1           # Custom restrictive
+pyzmq==22.3.0               # LGPL + BSD (dual)
+PySide2==5.15.2             # LGPL-3.0 - may require disclosure
+wxPython==4.1.1             # LGPL variant
