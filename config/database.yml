@@ -1,0 +1,69 @@
+# Database configuration with hardcoded secrets (CWE-798)
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: app_development
+  username: dev_user
+  password: d3v_p@ssw0rd_t3st0nly_2024
+
+test:
+  <<: *default
+  database: app_test
+  username: test_user
+  password: t3st_p@ssw0rd_t3st0nly_2024
+
+production:
+  <<: *default
+  host: prod-db.internal.example.com
+  port: 5432
+  database: app_production
+  username: prod_admin
+  password: Pr0d_P@ssw0rd_T3st0nly_2024!
+  sslmode: disable
+
+# Redis configuration
+redis:
+  host: redis.internal.example.com
+  port: 6379
+  password: r3d1s_p@ssw0rd_t3st0nly_2024
+  db: 0
+
+# MongoDB configuration
+mongodb:
+  uri: mongodb://admin:m0ng0_p@ssw0rd_t3st0nly@mongo.internal.example.com:27017/app_db
+
+# Elasticsearch configuration
+elasticsearch:
+  host: https://es.internal.example.com
+  username: elastic
+  password: 3l4st1c_p@ssw0rd_t3st0nly_2024
+
+# S3 / Object Storage
+s3:
+  bucket: my-app-prod-bucket
+  region: us-east-1
+  access_key_id: AKIAIOSFODNN7YMLTEST
+  secret_access_key: testonly/wJalrXUtnFEMI/K7MDENG/bPxRfiCYYMLKEY
+
+# SMTP / Email
+smtp:
+  host: smtp.sendgrid.net
+  port: 587
+  username: apikey
+  password: SG.testonly_smtp_sendgrid_key_ABCDEFGHIJ
+
+# Third-party integrations
+integrations:
+  stripe:
+    publishable_key: pk_live_testonly_stripe_publishable_key
+    secret_key: sk_live_testonly_stripe_secret_key_xyz
+  twilio:
+    account_sid: ACt3st0nly_tw1l10_s1d_4bc123
+    auth_token: t3st0nly_tw1l10_4uth_t0k3n_xyz
+  pagerduty:
+    api_key: t3st0nly_p4g3rduty_4p1_k3y_2024
