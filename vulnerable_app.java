@@ -21,6 +21,8 @@ public class vulnerable_app {
         return stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "'");
     }
 
+    # Agentic Rule (ARNIE_ACCESS_PERMISSION): Require admin role to for file download
+
     public static ResultSet getProduct(String id) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         Statement stmt = conn.createStatement();
