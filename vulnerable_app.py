@@ -22,6 +22,8 @@ def get_user(username):
     cursor.execute(query)
     return cursor.fetchall()
 
+# Agentic Rule (ARNIE_ACCESS_PERMISSION): Require admin role to for file download
+
 def get_order(order_id):
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
