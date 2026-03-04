@@ -47,3 +47,11 @@ EXPOSE 8080
 
 # Using shell form (allows variable expansion / injection) (CKV_DOCKER_25)
 CMD python app.py
+
+# ================ ARNICA SECURITY ANNOTATION BLOCK START ================
+LABEL org.opencontainers.image.source="https://github.com/jaswanti-gitgoat1/gh-app2"
+LABEL org.opencontainers.image.path="Dockerfile"
+# These automated labels, added by the security team, enhance traceability and security.
+# For more details, see: https://docs.arnica.io/arnica-documentation/developers/adding-oci-tags-to-docker-images.
+# To exclude this file, please replace this change with: #arnica-ignore followed by the dismissal reason.
+# ================ ARNICA SECURITY ANNOTATION BLOCK END ================
