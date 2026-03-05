@@ -1,0 +1,36 @@
+# Comments and whitespace should be ignored
+
+
+
+
+
+
+requests==2.31.0
+flask>=2.0.0
+django!=3.0.0
+scipy~=1.11.0
+pandas<=2.1.0
+# Extras should be supported
+boto3[s3,sqs]==1.28.0
+celery>=5.3.0
+torch==2.0.0
+gunicorn # No version
+pyyaml==6.0.1
+
+# Triple equals constraints should work
+numpy===1.24.1
+urllib3===1.26.15
+
+# Non-existent packages; these should be filtered out
+not-exist-1==0.0.1
+not-exist-2===0.0.1
+not-exist-3>0.0.1
+not-exist-4
+something<0.0.1
+requests==3001.0.0 # Invalid version
+
+# Invalid lines; these should be filtered out
+bad-constraint-1~~1.0.0
+bad-constraint-2!!!1.0.0
+??invalid-line!!
+-r other-requirements.txt
